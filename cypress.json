@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://local.tis-selfservice.com",
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 15000,
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "configFile": "reporter-config.json"
+  }
+}
