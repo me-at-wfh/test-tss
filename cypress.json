@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://local.tis-selfservice.com",
+  "reporter": "spec",
+  "chromeWebSecurity": false,
+  "defaultCommandTimeout": 15000
+}

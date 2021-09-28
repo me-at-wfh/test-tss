@@ -1,0 +1,28 @@
+@import "../../Common.module.scss";
+:global .nhsuk-grid-column-one-third,
+:global .nhsuk-grid-column-one-half {
+  .nhsuk-summary-list {
+    padding: 10px;
+    background-color: #f0f4f5;
+    .nhsuk-summary-list__row {
+      width: 100%;
+      &:last-child {
+        dt,
+        dd {
+          border-bottom: 0;
+        }
+      }
+      @media only screen and (min-width: 769px) {
+        font-size: 0.8em;
+      }
+    }
+  }
+}
+
+:global .nhsuk-grid-column-one-half {
+  .nhsuk-summary-list__row {
+    @media only screen and (min-width: 769px) {
+      font-size: 0.9em;
+    }
+  }
+}

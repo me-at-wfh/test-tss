@@ -1,0 +1,119 @@
+{
+  "name": "trainee-ui-app",
+  "version": "0.10.1",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.5.1",
+    "@sentry/browser": "^5.20.1",
+    "@types/node": "^14.14.10",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/yup": "0.29.5",
+    "aws-amplify": "^3.3.13",
+    "aws-amplify-react": "^3.1.5",
+    "axios": "^0.21.0",
+    "contentful": "^7.14.6",
+    "eslint-plugin-cypress": "^2.11.1",
+    "formik": "^2.2.5",
+    "moment": "^2.27.0",
+    "nhsuk-frontend": "^3.1.0",
+    "nhsuk-react-components": "^1.2.5",
+    "node-sass": "^4.14.1",
+    "react": "^17.0.0",
+    "react-axe": "^3.5.3",
+    "react-cookie-consent": "^5.2.0",
+    "react-dom": "^17.0.0",
+    "react-loading": "^2.0.3",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-test-renderer": "^16.13.0",
+    "react-toastify": "^6.1.0",
+    "redux": "^4.0.5",
+    "redux-mock-store": "^1.5.4",
+    "redux-thunk": "^2.3.0",
+    "stylelint": "^13.6.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7",
+    "yup": "^0.29.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "prebuild": "npm run generate-build-version",
+    "generate-build-version": "ts-node generate-build-version",
+    "build": "react-scripts build",
+    "test": "react-scripts test --silent --watchAll=false --coverage --testResultsProcessor jest-sonar-reporter",
+    "cypress": "cypress run",
+    "cypress:open": "cypress open",
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ext .ts,.tsx,.js --fix",
+    "stylelint": "stylelint \"src/**/*.scss\" \"src/**/*.css\" --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run stylelint"
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.10",
+    "@types/react-test-renderer": "^16.9.3",
+    "@types/redux-mock-store": "^1.0.2",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
+    "cypress": "^6.0.0",
+    "enzyme": "^3.11.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "jest-sonar-reporter": "^2.0.0",
+    "prettier": "^2.1.2",
+    "stylelint-prettier": "^1.1.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/src/mock-data/*.{js,jsx,ts,tsx}",
+      "!**/src/redux/store/*.{js,jsx,ts,tsx}",
+      "!**/src/redux/types.ts",
+      "!**/src/components/forms/formr-part-b/Sections/SectionProps.ts",
+      "!**/src/*.{js,ts}",
+      "!**/src/index.tsx",
+      "!**/src/models/*.ts",
+      "!**/src/redux/reducers/index.ts",
+      "**/src/**/*.{ts,tsx}"
+    ],
+    "coverageReporters": [
+      "json",
+      "html",
+      "lcov",
+      "text"
+    ]
+  },
+  "jestSonar": {
+    "sonar56x": true,
+    "reportPath": ".",
+    "reportFile": "coverage/sonar-report.xml",
+    "indent": 4
+  }
+}
