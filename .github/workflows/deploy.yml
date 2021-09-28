@@ -1,0 +1,119 @@
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+name: Deploy to Amazon ECS
+
+jobs:
+  # dockerize:
+  #   name: Dockerize
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v1
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: eu-west-2
+
+  #     - name: Login to Amazon ECR
+  #       id: login-ecr
+  #       uses: aws-actions/amazon-ecr-login@v1
+
+  #     - name: Build, tag, and push image to Amazon ECR
+  #       id: build-image
+  #       env:
+  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #         ECR_REPOSITORY: ${{ github.event.repository.name }}
+  #         IMAGE_TAG: ${{ github.sha }}
+  #       run: |
+  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+  deploy-pre-prod:
+    environment: pre-prod
+    name: Deploy to pre-production environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition-pre-prod.json
+          container-name: trainee-ui
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:135f393fc71f166453934302eff183fd3b948403
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: trainee-ui
+          cluster: trainee-preprod
+          wait-for-service-stability: true
+
+      - name: Run E2E Tests
+        id: e2e-tests
+        env:
+          CYPRESS_baseUrl: https://trainee.tis.nhs.uk
+          CYPRESS_password: ${{ secrets.E2E_TEST_PASS }}
+          CYPRESS_username: ${{ secrets.E2E_TEST_USER }}
+        run: |
+          npm install
+          npm run cypress
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    needs: [deploy-pre-prod]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition-prod.json
+          container-name: ${{ github.event.repository.name }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ github.event.repository.name }}:${{ github.sha }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ github.event.repository.name }}
+          cluster: trainee-prod
+          wait-for-service-stability: true
