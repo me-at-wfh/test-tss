@@ -1,0 +1,88 @@
+@import "~nhsuk-frontend/packages/nhsuk";
+@import "~nhsuk-frontend/packages/core/all";
+
+$nhsFont: “Frutiger W01”, Arial, sans-serif;
+
+html {
+  background-color: inherit;
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.MuiDrawer-root {
+  z-index: 100;
+}
+
+.MuiToolbar-root {
+  background: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.MuiTypography-h5 {
+  color: black;
+}
+
+.header-menu {
+  color: black;
+}
+
+.bottom-navigation-menu {
+  z-index: 110;
+  display: none;
+}
+
+.MuiDrawer-paper {
+  top: 64px !important;
+  border-top: transparent;
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.nhsuk-pagination__link {
+  cursor: pointer;
+}
+
+.noWrap {
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 600px) {
+  .MuiTypography-h5 {
+    display: none;
+  }
+
+  .bottom-navigation-menu {
+    display: block;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+    box-shadow: -1px -2px 0px 0px rgba(0, 0, 0, 0.2),
+      0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  }
+
+  .header-menu {
+    display: none;
+  }
+
+  .MuiTabs-root {
+    display: none;
+  }
+}
